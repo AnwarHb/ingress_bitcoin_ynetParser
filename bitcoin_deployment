@@ -1,0 +1,104 @@
+# bitcoin app deployment
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bitcoin-app-deployment
+  labels:
+    app: bitcoin-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bitcoin-app
+  template:
+    metadata:
+      labels:
+        app: bitcoin-app
+    spec:
+      containers:
+        - name: bitcoin-app
+          image: anwarhb/docker_bitcoin
+          ports:
+            - containerPort: 5000
+
+---
+# bitcoin Application Service
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: bitcoin-app-service
+spec:
+  selector:
+    app: bitcoin-app
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+  type: ClusterIP
+
+---
+# redis Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-db-deployment
+  labels:
+    app: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      volumes:
+        - name: pv-storage
+          persistentVolumeClaim:
+            claimName: redis-pv-claim
+      containers:
+        - name: redis
+          image: redis:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 6379
+          volumeMounts:
+            - mountPath: "/data"
+              name: pv-storage
+
+---
+#redis Service
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-service
+
+spec:
+  selector:
+    app: redis
+  ports:
+    - protocol: TCP
+      port: 6379
+      targetPort: 6379
+  type: ClusterIP
+
+---
+# pv of redis
+apiVersion: v1
+kind: PersistentVolumeClaim
+
+metadata:
+  name: redis-pv-claim
+
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+
