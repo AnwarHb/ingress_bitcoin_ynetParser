@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: parser-deployment
+  labels:
+    app: parser
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: parser
+  template:
+    metadata:
+      labels:
+        app: parser
+    spec:
+      containers:
+      - name: ynet-parser
+        image: anwarhb/ynet_parser
+        ports:
+         - containerPort: 8090
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ynet-parser-service
+  labels:
+    app: parser
+spec:
+  ports:
+  - port: 8090
+    targetPort: 8090
+  type: ClusterIP
+  selector:
+    app: parser
