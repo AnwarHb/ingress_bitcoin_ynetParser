@@ -15,17 +15,22 @@ for every application  a docker image was created and pushed to Docker Hub :
 - to pull the ynet_parser image: `docker pull anwarhb/ynet_parser:latest`
 
 #### Run Code in minikube:
-Clone the code: 
+- Clone the code: 
 `git clone https://github.com/AnwarHb/ingress_bitcoin_ynetParser.git`
-Start minikube and enable the ingress addon if needed:
+
+- Start minikube and enable the ingress addon if needed:
 `minikube start`
 `minikube addons enable ingress`
-Apply the yaml files to create the pods and services needed:
+
+- Apply the yaml files to create the pods and services needed:
+
 ` kubectl apply -f bitcoin_deployment.yml`
 `kubectl apply -f ynet_deployment.yml`
 ` kubectl apply -f ingress_deploy.yml`
-To be able to access ports running in a tunnel is needed (in windows):
+
+- To be able to access ports running in a tunnel is needed (in windows):
 `minikube tunnel`
+
 
 - you can access the bitcoin application with
 [http://localhost/bitcoin](http://localhost/bitcoin)
