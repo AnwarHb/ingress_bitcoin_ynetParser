@@ -29,6 +29,7 @@ for every application  a docker image was created and pushed to Docker Hub :
 `kubectl apply -f ynet_deployment.yml`
 
 ` kubectl apply -f ingress_deploy.yml`
+
   or  ` kubectl apply -f .`
 - To be able to access ports running in a tunnel is needed (in windows):
 `minikube tunnel`
